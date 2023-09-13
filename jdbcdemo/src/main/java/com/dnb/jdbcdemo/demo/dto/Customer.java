@@ -7,18 +7,22 @@ import com.dnb.jdbcdemo.demo.exceptions.InvalidIdException;
 import com.dnb.jdbcdemo.demo.exceptions.InvalidPanException;
 import com.dnb.jdbcdemo.demo.exceptions.InvalidUUIDException;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@Entity
 public class Customer {
-	private int customerId;
-	private String customerName;
-	private String customerContactNumber;
-	private String customerAddress;
-	private String customerPan;
-	private String customerUUID;
+	@Id private int customerId;
+	@Column private String customerName;
+	@Column private String customerContactNumber;
+	@Column private String customerAddress;
+	@Column private String customerPan;
+ 	@Column private String customerUUID;
 	
 	
 	public Customer(int customerId, String customerName, String customerContactNumber, String customerAddress,

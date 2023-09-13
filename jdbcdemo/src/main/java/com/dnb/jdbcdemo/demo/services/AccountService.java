@@ -19,8 +19,8 @@ import com.dnb.jdbcdemo.demo.exceptions.InvalidUUIDException;
 public interface AccountService {
     public Account createAccount(Account account) throws InvalidPanException, InvalidUUIDException, InvalidContactNumberException, InvalidIdException, IdNotFoundException ;
     public Optional<Account> getAccountById(String accountId) throws InvalidNameException, InvalidDateException, InvalidContactNumberException, InvalidFloatException, InvalidIdException;
-    public boolean deleteAccount(String accountId);
+    public boolean deleteAccount(String accountId) throws IdNotFoundException;
     public boolean updateAccount(String accountId);
-    public List<Account> getAllAccount() throws InvalidNameException, InvalidDateException, InvalidContactNumberException, InvalidFloatException, InvalidIdException;
+    public Iterable<Account> getAllAccount() throws InvalidNameException, InvalidDateException, InvalidContactNumberException, InvalidFloatException, InvalidIdException;
 
 }

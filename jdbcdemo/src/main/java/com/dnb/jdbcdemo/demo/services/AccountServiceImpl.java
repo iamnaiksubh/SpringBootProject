@@ -21,42 +21,47 @@ import javax.naming.InvalidNameException;
 
 @Service
 public class AccountServiceImpl implements AccountService {
+	@Autowired
+	AccountRepository accountRepository;
 
-    @Autowired
-    public AccountRepository accountRepository;
-    
-    @Autowired
-    public CustomerService customerService;
+	@Override
+	public Account createAccount(Account account) throws InvalidPanException, InvalidUUIDException,
+			InvalidContactNumberException, InvalidIdException, IdNotFoundException {
+	
+		return accountRepository.save(account);
+	}
 
-    @Override
-    public Account createAccount(Account account) throws InvalidPanException, InvalidUUIDException, InvalidContactNumberException, InvalidIdException, IdNotFoundException  {
-    	Optional<Customer> optional = customerService.getCustomerById(account.getCustomer().getCustomerId());
-    	
-    	if (optional.isPresent())
-    		return accountRepository.createAccount(account);
-    	else {
-    		 throw new IdNotFoundException("Customer Details Not Found");
-    	}
-    }
+	@Override
+	public Optional<Account> getAccountById(String accountId) throws InvalidNameException, InvalidDateException,
+			InvalidContactNumberException, InvalidFloatException, InvalidIdException {
+		// TODO Auto-generated method stub
+		return accountRepository.findById(accountId);
+	}
 
-    @Override
-    public Optional<Account> getAccountById(String accountId) throws InvalidNameException, InvalidDateException, InvalidContactNumberException, InvalidFloatException, InvalidIdException {
-        return accountRepository.getAccountById(accountId);
-    }
+	@Override
+	public boolean deleteAccount(String accountId) throws IdNotFoundException {
+		if (accountRepository.existsById(accountId)) {
+			accountRepository.deleteById(accountId);
+			
+			if (!accountRepository.existsById(accountId)) {
+				return true;
+			}
+		}
+		throw new IdNotFoundException("account nahi mila re tera");
+	}
 
-    @Override
-    public boolean deleteAccount(String accountId) {
-        return accountRepository.deleteAccount(accountId);
-    }
+	@Override
+	public boolean updateAccount(String accountId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public boolean updateAccount(String accountId) {
-
-        return false;
-    }
-
-    @Override
-    public List<Account> getAllAccount() throws InvalidNameException, InvalidDateException, InvalidContactNumberException, InvalidFloatException, InvalidIdException {
-        return accountRepository.getAllAccount();
-    }
+	@Override
+	public Iterable<Account> getAllAccount() throws InvalidNameException, InvalidDateException,
+			InvalidContactNumberException, InvalidFloatException, InvalidIdException {
+		// TODO Auto-generated method stub
+		
+		return accountRepository.findAll();
+	}
+	
 }

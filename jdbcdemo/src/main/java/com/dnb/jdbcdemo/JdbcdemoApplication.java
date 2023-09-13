@@ -124,7 +124,7 @@ public class JdbcdemoApplication {
 		
 		// getAllAccounts
 		if (entity.value) {
-			List<Account> accountList = null;
+			Iterable<Account> accountList = null;
 			try {
 				try {
 					accountList = accountService.getAllAccount();
@@ -136,10 +136,10 @@ public class JdbcdemoApplication {
 				e.printStackTrace();
 			}
 			
-			if (accountList.isEmpty()) {
-				System.out.print("No accounts details to show.\n\n");
-				return;
-			}
+//			if (accountList) {
+//				System.out.print("No accounts details to show.\n\n");
+//				return;
+//			}
 
 	        accountList.forEach(account -> {
 	            System.out.println(account.getAccountId() + " " + account.getAccountHolderName() + " " + account.getAccountType() + " " +
@@ -149,16 +149,16 @@ public class JdbcdemoApplication {
 		}
 		
 		// getAllCustomers
-		List<Customer> customerList = null;
+		Iterable<Customer> customerList = null;
 		try {
 			customerList = customerService.getAllCustomer();
 		} catch (InvalidPanException | InvalidUUIDException | InvalidContactNumberException | InvalidIdException e) {
 			e.printStackTrace();
 		}
 			
-		if (customerList.isEmpty()) {
-			System.out.print("No customer details to show.\n\n");
-		}
+//		if (customerList.isEmpty()) {
+//			System.out.print("No customer details to show.\n\n");
+//		}
         customerList.forEach(customer -> {
         	System.out.println(customer.getCustomerId() + " " + customer.getCustomerName() + " " + customer.getCustomerAddress() + " " + 
     	            customer.getCustomerContactNumber() + " " + customer.getCustomerPan() + " " + customer.getCustomerUUID());
@@ -171,12 +171,21 @@ public class JdbcdemoApplication {
         System.out.println("Enter the " + enitityName + " Id which you want to delete : ");
         String entityId = sc.next();
         
-        boolean result;
+        boolean result = false;
         
         if (entity.value) {
-        	result = accountService.deleteAccount(entityId);
+        	try {
+				result = accountService.deleteAccount(entityId);
+			} catch (IdNotFoundException e) {
+				e.printStackTrace();
+			}
 		}else {
-			result = customerService.deleteCustomer(entityId);
+			try {
+				result = customerService.deleteCustomer(Integer.parseInt(entityId));
+			} catch (NumberFormatException | IdNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
         if (result) {
@@ -192,47 +201,37 @@ public class JdbcdemoApplication {
         int n = sc.nextInt();
         for (int i = 0; i < n; i++) {
             Account newAccount = new Account();
-            System.out.println("Account Id : ");
-            try {
-				newAccount.setAccountId(sc.next());
-			} catch (InvalidIdException e) {
-				e.printStackTrace();
-			}
+//            System.out.println("Account Id : ");
+//            try {
+//				newAccount.setAccountId(sc.next());
+//			} catch (InvalidIdException e) {
+//				e.printStackTrace();
+//			}
 
             System.out.println("Account Holder Name : ");
-            try {
-				newAccount.setAccountHolderName(sc.next());
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-			}
-
+            
+			newAccount.setAccountHolderName(sc.next());
+			
             System.out.println("Account Type : ");
             newAccount.setAccountType(sc.next());
 
             System.out.println("Balance : ");
-            try {
-				newAccount.setBalance(sc.nextFloat());
-			} catch (InvalidFloatException e) {
-				e.printStackTrace();
-			}
+            
+			newAccount.setBalance(sc.nextFloat());
+			
 
             System.out.println("Contact Number : ");
-            try {
-				newAccount.setContactNumber(sc.next());
-			} catch (InvalidContactNumberException e) {
-				e.printStackTrace();
-			}
+            
+			newAccount.setContactNumber(sc.next());
+			
 
             System.out.println("Address : ");
             newAccount.setAddress(sc.next());
 
             System.out.println("DOB : ");
             String dob = sc.next();
-            try {
 				newAccount.setDob(convertToLocalDate(dob));
-			} catch (InvalidDateException e) {
-				e.printStackTrace();
-			}
+			
 
             newAccount.setAccountStatus(true);
             
@@ -244,7 +243,7 @@ public class JdbcdemoApplication {
 					| InvalidIdException e) {
 				e.printStackTrace();
 			}
-            newAccount.setCustomer(customer);
+            //newAccount.setCustomer(customer);
             accounts.add(newAccount);
         }
 
